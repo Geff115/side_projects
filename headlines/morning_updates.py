@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 """
-Generating morning updates using REST APIs.
-
-API Keys used is:
-    - NewsAPI API Key
-    - MeteorSource API Key
-    - Openai API Key
+Generating latest headlines, utilizing NewsAPI
+/latest-headlines endpoint to get latest headlines
+information based on the input location.
 """
 
 import os
@@ -14,7 +11,7 @@ import requests
 
 def get_morning_updates():
     """Getting news update from newsapi API"""
-    # Fetching newsapi api key from the environment variable
+    # Fetching newsapi api key and meteor source api key
     NEWS_API_KEY = os.getenv("NEWS_API_KEY")
     if not NEWS_API_KEY:
         return "ERROR: NEWS_API_KEY environment variable not set"
@@ -24,6 +21,7 @@ def get_morning_updates():
         'apiKey': NEWS_API_KEY,
         'country': 'us'
     }
+
     # Sending request to the top-headlines endpoint
     try:
         response = requests.get(

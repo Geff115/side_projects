@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from morning_updates import get_morning_updates
+from weather import get_weather_info
 
 
 app = FastAPI()
@@ -40,3 +41,12 @@ def morning_updates():
         return updates
     except Exception as e:
         return {"error": f"An unexpected error occured: {str(e)}"}
+
+
+@app.get("/weather")
+def weather_endpoint(location: str, language: str = 'en'):
+    """Fetch weather for a given location and language"""
+    try:
+        return get_weather_info(location, language)
+    except Exception as e:
+        return {"error": str(e)}
