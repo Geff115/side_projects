@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Updates</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Aerial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 36px;
+        }
+        #headlines {
+            list-style: None;
+            padding: 0;
+            margin: 0;
+        }
+        .headline {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            transition: all 0.3 ease;
+        }
+        .headline:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .headline .icon {
+            font-size: 36px;
+            color: #4CAF50;
+            margin-right: 20px;
+        }
+        .headline .content {
+            flex: 1;
+        }
+        .headline .content h3 {
+            font-size: 20px;
+            color: #333;
+            margin: 0;
+        }
+        .headline .content p {
+            font-size: 16px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .headline a {
+            font-size: 16px;
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .headline a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Morning Updates</h1>
+    <div id="loading" style="text-align: center; font-size: 18px; display: none;">Loading...</div>
+    <ul id="headlines"></ul>
+    <script>
+        async function fetchHeadlines() {
+            const loadingIndicator = document.getElementById("loading");
+            loadingIndicator.style.display = "block";  // show spinner
+            try {
+                const response = await fetch("http://127.0.0.1:8000/morning-updates");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                // console.log("fetched data: ", data);
+                const headlines = data.morning_updates;
+
+                if (!Array.isArray(headlines)) {
+                    throw new Error("Expected 'morning_updates' to be an array.");
+                }
+
+                const headlineContainer = document.getElementById("headlines");
+                headlineContainer.innerHTML = '';  // clear previous headlines if any
+                headlines.forEach(headline => {
+                    const listItem = document.createElement("li");
+                    listItem.className = "headline"
+
+                    // Adding an icon
+                    const icon = document.createElement("div");
+                    icon.className = "icon";
+                    icon.innerHTML = "📰";  // Newspaper emoji as an icon
+
+                    // Creating the content
+                    const content = document.createElement("div");
+                    content.className = "content";
+
+                    const title = document.createElement("h3");
+                    title.innerText = headline.title || "No title available.";  // Getting the title from the string
+                    content.appendChild(title);
+
+                    const description = document.createElement("p");
+                    description.innerText = headline.description || "No description available.";
+                    content.appendChild(description);
+
+                    const link = document.createElement("a");
+                    link.href = headline.url || "#";
+                    link.target = "_blank";  // opens in a new tab
+                    link.innerText = "Read more...";
+                    content.appendChild(link);
+
+                    const date = document.createElement("small");
+                    date.innerText = `Published on: ${
+                    headline.publishedAt
+                        ? new Date(headline.publishedAt).toLocaleString()
+                        : "unknown date"
+                    }`;
+                    date.style.display = "block";
+                    date.style.marginTop = "5px";
+                    date.style.color = "#666";
+                    content.appendChild(date);
+
+                    // Appending the icon and content to the list item
+                    listItem.appendChild(icon);
+                    listItem.appendChild(content);
+
+                    // Adding the listItem to the container
+                    headlineContainer.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error("Error fetching headlines: ", error);
+                const headlinesContainer = document.getElementById("headlines");
+                headlinesContainer.innerHTML = "<li>Error fetching headlines. Please try again later.</li>";
+            } finally {
+                loadingIndicator.style.display = "none";  // Hide spinner
+            }
+        }
+
+        // Fetch headlines when the page loads
+        document.addEventListener("DOMContentLoaded", fetchHeadlines);
+    </script>
+</body>
+</html>
