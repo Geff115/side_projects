@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Updates</title>
+    <title>Latest headlines</title>
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
     <style>
         body {
@@ -83,7 +83,7 @@
     </style>
 </head>
 <body>
-    <h1>Your Morning Headlines</h1>
+    <h1>Your Latest Headlines</h1>
     <fieldset style="border: 1px solid #ddd; padding: 20px; margin: 20px;">
         <legend>Weather Forecast</legend>
         <form id="weather-form" style="text-align: center; margin: 20px;">
@@ -127,13 +127,13 @@
 
                 // Rendering the weather forecast
                 const { location, language, forecast } = data;
-                let forecastHtml = `<h3>Weather Forecast for ${location} </h3><ul style="list-style-type: none; padding: 0;">`;
+                let forecastHtml = `<h3>Weather Forecast for ${location} This Week </h3><ul style="list-style-type: none; padding: 0;">`;
                 
                 forecast.forEach(day => {
                     forecastHtml += `
                         <li style="margin: 10px 0; padding: 10px; background: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
                             <strong>${day.date}:</strong> ${day.summary} <br>
-                            <em>Temperature:</em> ${day.temperature}
+                            <em>Minimum / maximum degrees:</em> ${day.temperature}
                         </li>`;
                 });
 
