@@ -126,14 +126,13 @@
                 }
 
                 // Rendering the weather forecast
-                const { location, language, forecast } = data;
-                let forecastHtml = `<h3>Weather Forecast for ${location} This Week </h3><ul style="list-style-type: none; padding: 0;">`;
+                const { location, forecast } = data;
+                let forecastHtml = `<h3>Weather Forecast for ${location} Today </h3><ul style="list-style-type: none; padding: 0;">`;
                 
                 forecast.forEach(day => {
                     forecastHtml += `
                         <li style="margin: 10px 0; padding: 10px; background: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
                             <strong>${day.date}:</strong> ${day.summary} <br>
-                            <em>Minimum / maximum degrees:</em> ${day.temperature}
                         </li>`;
                 });
 

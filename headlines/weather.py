@@ -69,15 +69,14 @@ def get_weather_info(location, language='en'):
 
     response_data2 = response2.json()
     try:
+        first_day = response_data2['daily']['data'][0]
         forecast = [
             {
-                "date": day["day"],
-                "summary": day["summary"],
-                "temperature": f"{day['all_day']['temperature_min']}/{day['all_day']['temperature_max']} °C",
+                "date": first_day["day"],
+                "summary": first_day["summary"]
             }
-            for day in response_data2['daily']['data']
         ]
     except(ValueError, KeyError):
         raise SystemExit("ERROR: could not fetch the weather information for the date and summary")
 
-    return {"location": location, "language": language, "forecast": forecast}
+    return {"location": location, "forecast": forecast}
